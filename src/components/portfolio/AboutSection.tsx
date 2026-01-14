@@ -1,46 +1,54 @@
 import React from 'react';
 import { usePortfolio } from '@/contexts/PortfolioContext';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 const AboutSection: React.FC = () => {
   const { data } = usePortfolio();
   const { about } = data;
 
   return (
-    <section id="about" className="py-24 md:py-32 relative">
+    <section id="about" className="py-32 md:py-40">
       <div className="container px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-16 md:gap-24 items-center">
             {/* Image */}
-            <div className="relative order-2 md:order-1">
-              <div className="aspect-[4/5] rounded-2xl overflow-hidden bg-secondary">
+            <ScrollReveal direction="left" className="order-2 md:order-1">
+              <div className="aspect-[3/4] overflow-hidden elegant-border">
                 {about.image ? (
                   <img 
                     src={about.image} 
                     alt="About"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                   />
                 ) : (
                   <div className="w-full h-full bg-gradient-to-br from-secondary to-muted flex items-center justify-center">
-                    <span className="text-6xl">👨‍💻</span>
+                    <span className="text-6xl opacity-20">✦</span>
                   </div>
                 )}
               </div>
-              {/* Decorative frame */}
-              <div className="absolute -bottom-4 -right-4 w-full h-full border-2 border-primary/30 rounded-2xl -z-10" />
-            </div>
+            </ScrollReveal>
             
             {/* Content */}
             <div className="order-1 md:order-2">
-              <span className="text-primary font-medium tracking-wider uppercase text-sm mb-4 block">
-                About Me
-              </span>
-              <h2 className="section-heading font-serif mb-6">
-                {about.title}
-              </h2>
-              <div className="w-20 h-1 bg-gradient-to-r from-primary to-gold-light mb-8" />
-              <p className="text-lg text-muted-foreground leading-relaxed whitespace-pre-line">
-                {about.description}
-              </p>
+              <ScrollReveal>
+                <span className="section-label mb-6 block">About</span>
+              </ScrollReveal>
+              
+              <ScrollReveal delay={0.1}>
+                <h2 className="section-heading mb-8">
+                  {about.title}
+                </h2>
+              </ScrollReveal>
+              
+              <ScrollReveal delay={0.2}>
+                <div className="divider mb-8" />
+              </ScrollReveal>
+              
+              <ScrollReveal delay={0.3}>
+                <p className="text-muted-foreground leading-[1.9] whitespace-pre-line">
+                  {about.description}
+                </p>
+              </ScrollReveal>
             </div>
           </div>
         </div>

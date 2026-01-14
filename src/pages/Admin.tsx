@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio, Project } from '@/contexts/PortfolioContext';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, FileText } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
+import FileUpload from '@/components/admin/FileUpload';
 
 const Admin: React.FC = () => {
   const { data, updateData, isAdmin } = usePortfolio();
@@ -58,6 +59,13 @@ const Admin: React.FC = () => {
     }));
   };
 
+  const updateResume = (key: string, value: string) => {
+    setLocalData(prev => ({
+      ...prev,
+      resume: { ...prev.resume, [key]: value }
+    }));
+  };
+
   const addProject = () => {
     const newProject: Project = {
       id: Date.now().toString(),
@@ -99,6 +107,7 @@ const Admin: React.FC = () => {
     { id: 'about', label: 'About', icon: User },
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'skills', label: 'Skills', icon: Code },
+    { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
 
@@ -107,46 +116,46 @@ const Admin: React.FC = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-card border-b border-border">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/30">
         <div className="container px-6">
           <div className="flex items-center justify-between h-16">
             <button
               onClick={() => navigate('/')}
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
             >
-              <ArrowLeft className="w-5 h-5" />
-              <span>Back to Site</span>
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back</span>
             </button>
             
-            <h1 className="text-xl font-serif font-bold">Admin Dashboard</h1>
+            <span className="section-label">Dashboard</span>
             
             <button
               onClick={handleSave}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              className="btn-minimal py-2 px-4"
             >
-              <Save className="w-4 h-4" />
-              <span>{saved ? 'Saved!' : 'Save Changes'}</span>
+              <Save className="w-3 h-3" />
+              <span>{saved ? 'Saved' : 'Save'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="container px-6 py-8">
-        <div className="flex gap-8">
+      <div className="container px-6 py-12">
+        <div className="flex gap-12">
           {/* Sidebar */}
-          <aside className="w-64 shrink-0">
-            <nav className="space-y-2">
+          <aside className="w-48 shrink-0">
+            <nav className="space-y-1">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
                     activeTab === tab.id 
-                      ? 'bg-primary text-primary-foreground' 
-                      : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                      ? 'text-primary border-l border-primary' 
+                      : 'text-muted-foreground hover:text-foreground border-l border-transparent'
                   }`}
                 >
-                  <tab.icon className="w-5 h-5" />
+                  <tab.icon className="w-4 h-4" />
                   <span>{tab.label}</span>
                 </button>
               ))}
@@ -154,11 +163,14 @@ const Admin: React.FC = () => {
           </aside>
 
           {/* Content */}
-          <main className="flex-1 max-w-3xl">
+          <main className="flex-1 max-w-2xl">
             {/* Hero Tab */}
             {activeTab === 'hero' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-serif font-bold">Hero Section</h2>
+              <div className="space-y-8">
+                <div>
+                  <span className="section-label mb-2 block">Hero Section</span>
+                  <h2 className="text-3xl font-light tracking-wide">Main Introduction</h2>
+                </div>
                 
                 <ImageUpload
                   value={localData.hero.image}
@@ -167,32 +179,32 @@ const Admin: React.FC = () => {
                 />
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Name</label>
+                  <label className="section-label block mb-3">Name</label>
                   <input
                     type="text"
                     value={localData.hero.name}
                     onChange={(e) => updateHero('name', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Title</label>
+                  <label className="section-label block mb-3">Title</label>
                   <input
                     type="text"
                     value={localData.hero.title}
                     onChange={(e) => updateHero('title', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Subtitle</label>
+                  <label className="section-label block mb-3">Subtitle</label>
                   <textarea
                     value={localData.hero.subtitle}
                     onChange={(e) => updateHero('subtitle', e.target.value)}
                     rows={3}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors resize-none"
                   />
                 </div>
               </div>
@@ -200,8 +212,11 @@ const Admin: React.FC = () => {
 
             {/* About Tab */}
             {activeTab === 'about' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-serif font-bold">About Section</h2>
+              <div className="space-y-8">
+                <div>
+                  <span className="section-label mb-2 block">About Section</span>
+                  <h2 className="text-3xl font-light tracking-wide">Your Story</h2>
+                </div>
                 
                 <ImageUpload
                   value={localData.about.image}
@@ -210,22 +225,22 @@ const Admin: React.FC = () => {
                 />
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Title</label>
+                  <label className="section-label block mb-3">Heading</label>
                   <input
                     type="text"
                     value={localData.about.title}
                     onChange={(e) => updateAbout('title', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-lg"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Description</label>
+                  <label className="section-label block mb-3">Description</label>
                   <textarea
                     value={localData.about.description}
                     onChange={(e) => updateAbout('description', e.target.value)}
-                    rows={6}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                    rows={8}
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors resize-none leading-relaxed"
                   />
                 </div>
               </div>
@@ -233,100 +248,108 @@ const Admin: React.FC = () => {
 
             {/* Projects Tab */}
             {activeTab === 'projects' && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-serif font-bold">Projects</h2>
+              <div className="space-y-8">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <span className="section-label mb-2 block">Projects Section</span>
+                    <h2 className="text-3xl font-light tracking-wide">Your Work</h2>
+                  </div>
                   <button
                     onClick={addProject}
-                    className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                    className="btn-minimal py-2 px-4"
                   >
-                    <Plus className="w-4 h-4" />
-                    Add Project
+                    <Plus className="w-3 h-3" />
+                    Add
                   </button>
                 </div>
                 
-                {localData.projects.map((project, index) => (
-                  <div key={project.id} className="p-6 bg-card border border-border rounded-xl space-y-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">Project {index + 1}</h3>
-                      <button
-                        onClick={() => deleteProject(project.id)}
-                        className="p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    
-                    <ImageUpload
-                      value={project.image}
-                      onChange={(v) => updateProject(project.id, 'image', v)}
-                      label="Project Image"
-                    />
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Title</label>
-                      <input
-                        type="text"
-                        value={project.title}
-                        onChange={(e) => updateProject(project.id, 'title', e.target.value)}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                <div className="space-y-8">
+                  {localData.projects.map((project, index) => (
+                    <div key={project.id} className="p-6 border border-border/50 space-y-6">
+                      <div className="flex items-center justify-between">
+                        <span className="section-label">Project {index + 1}</span>
+                        <button
+                          onClick={() => deleteProject(project.id)}
+                          className="p-2 text-muted-foreground hover:text-destructive transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      
+                      <ImageUpload
+                        value={project.image}
+                        onChange={(v) => updateProject(project.id, 'image', v)}
+                        label="Project Image"
                       />
+                      
+                      <div>
+                        <label className="section-label block mb-3">Title</label>
+                        <input
+                          type="text"
+                          value={project.title}
+                          onChange={(e) => updateProject(project.id, 'title', e.target.value)}
+                          className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="section-label block mb-3">Description</label>
+                        <textarea
+                          value={project.description}
+                          onChange={(e) => updateProject(project.id, 'description', e.target.value)}
+                          rows={2}
+                          className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors resize-none"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="section-label block mb-3">Tags (comma-separated)</label>
+                        <input
+                          type="text"
+                          value={project.tags.join(', ')}
+                          onChange={(e) => updateProject(project.id, 'tags', e.target.value.split(',').map(t => t.trim()))}
+                          className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="section-label block mb-3">Link (optional)</label>
+                        <input
+                          type="url"
+                          value={project.link || ''}
+                          onChange={(e) => updateProject(project.id, 'link', e.target.value)}
+                          className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
+                          placeholder="https://..."
+                        />
+                      </div>
                     </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Description</label>
-                      <textarea
-                        value={project.description}
-                        onChange={(e) => updateProject(project.id, 'description', e.target.value)}
-                        rows={2}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Tags (comma-separated)</label>
-                      <input
-                        type="text"
-                        value={project.tags.join(', ')}
-                        onChange={(e) => updateProject(project.id, 'tags', e.target.value.split(',').map(t => t.trim()))}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Link (optional)</label>
-                      <input
-                        type="url"
-                        value={project.link || ''}
-                        onChange={(e) => updateProject(project.id, 'link', e.target.value)}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-                        placeholder="https://..."
-                      />
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Skills Tab */}
             {activeTab === 'skills' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-serif font-bold">Skills</h2>
+              <div className="space-y-8">
+                <div>
+                  <span className="section-label mb-2 block">Skills Section</span>
+                  <h2 className="text-3xl font-light tracking-wide">Your Expertise</h2>
+                </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Skills (comma-separated)</label>
+                  <label className="section-label block mb-3">Skills (comma-separated)</label>
                   <textarea
                     value={localData.skills.join(', ')}
                     onChange={(e) => updateSkills(e.target.value)}
                     rows={4}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors resize-none"
                     placeholder="React, TypeScript, Node.js..."
                   />
                 </div>
                 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-3">
                   {localData.skills.map(skill => (
-                    <span key={skill} className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                    <span key={skill} className="px-4 py-2 text-xs uppercase tracking-widest border border-primary/30 text-primary">
                       {skill}
                     </span>
                   ))}
@@ -334,74 +357,110 @@ const Admin: React.FC = () => {
               </div>
             )}
 
-            {/* Contact Tab */}
-            {activeTab === 'contact' && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-serif font-bold">Contact Information</h2>
+            {/* Resume Tab */}
+            {activeTab === 'resume' && (
+              <div className="space-y-8">
+                <div>
+                  <span className="section-label mb-2 block">Resume Section</span>
+                  <h2 className="text-3xl font-light tracking-wide">Your CV</h2>
+                </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Email</label>
+                  <label className="section-label block mb-3">Description</label>
+                  <textarea
+                    value={localData.resume?.description || ''}
+                    onChange={(e) => updateResume('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors resize-none"
+                    placeholder="A brief description about your resume..."
+                  />
+                </div>
+                
+                <FileUpload
+                  value={localData.resume?.file || ''}
+                  filename={localData.resume?.filename || ''}
+                  onChange={(file, filename) => {
+                    setLocalData(prev => ({
+                      ...prev,
+                      resume: { ...prev.resume, file, filename }
+                    }));
+                  }}
+                  label="Resume File"
+                />
+              </div>
+            )}
+
+            {/* Contact Tab */}
+            {activeTab === 'contact' && (
+              <div className="space-y-8">
+                <div>
+                  <span className="section-label mb-2 block">Contact Section</span>
+                  <h2 className="text-3xl font-light tracking-wide">Get in Touch</h2>
+                </div>
+                
+                <div>
+                  <label className="section-label block mb-3">Email</label>
                   <input
                     type="email"
                     value={localData.contact.email}
                     onChange={(e) => updateContact('email', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Phone</label>
+                  <label className="section-label block mb-3">Phone</label>
                   <input
                     type="tel"
                     value={localData.contact.phone}
                     onChange={(e) => updateContact('phone', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                   />
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium mb-2">Location</label>
+                  <label className="section-label block mb-3">Location</label>
                   <input
                     type="text"
                     value={localData.contact.location}
                     onChange={(e) => updateContact('location', e.target.value)}
-                    className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                   />
                 </div>
                 
-                <div className="pt-4 border-t border-border">
-                  <h3 className="font-semibold mb-4">Social Links</h3>
+                <div className="pt-8 border-t border-border/30">
+                  <span className="section-label mb-6 block">Social Links</span>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2">LinkedIn</label>
+                      <label className="section-label block mb-3">LinkedIn</label>
                       <input
                         type="url"
                         value={localData.contact.social.linkedin || ''}
                         onChange={(e) => updateSocial('linkedin', e.target.value)}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://linkedin.com/in/..."
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium mb-2">GitHub</label>
+                      <label className="section-label block mb-3">GitHub</label>
                       <input
                         type="url"
                         value={localData.contact.social.github || ''}
                         onChange={(e) => updateSocial('github', e.target.value)}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://github.com/..."
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium mb-2">Twitter</label>
+                      <label className="section-label block mb-3">Twitter</label>
                       <input
                         type="url"
                         value={localData.contact.social.twitter || ''}
                         onChange={(e) => updateSocial('twitter', e.target.value)}
-                        className="w-full px-4 py-3 bg-secondary border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                        className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://twitter.com/..."
                       />
                     </div>

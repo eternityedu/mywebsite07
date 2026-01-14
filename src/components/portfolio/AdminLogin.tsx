@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePortfolio } from '@/contexts/PortfolioContext';
-import { X, Lock } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface AdminLoginProps {
@@ -27,59 +28,67 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card border border-border rounded-2xl p-8 w-full max-w-md relative animate-fade-in">
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-muted-foreground hover:text-foreground transition-colors"
+    <AnimatePresence>
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-background/95 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+      >
+        <motion.div 
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          className="w-full max-w-sm relative"
         >
-          <X className="w-5 h-5" />
-        </button>
-        
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock className="w-8 h-8 text-primary" />
-          </div>
-          <h2 className="text-2xl font-serif font-bold">Admin Access</h2>
-          <p className="text-muted-foreground text-sm mt-2">Enter your credentials to continue</p>
-        </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-2">Username</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="Enter username"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
-              placeholder="Enter password"
-            />
-          </div>
-          
-          {error && (
-            <p className="text-destructive text-sm text-center">{error}</p>
-          )}
-          
           <button
-            type="submit"
-            className="w-full py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors"
+            onClick={onClose}
+            className="absolute -top-12 right-0 p-2 text-muted-foreground hover:text-foreground transition-colors"
           >
-            Login
+            <X className="w-5 h-5" />
           </button>
-        </form>
-      </div>
-    </div>
+          
+          <div className="text-center mb-10">
+            <span className="section-label block mb-4">Admin</span>
+            <h2 className="text-3xl font-light tracking-wide">Access Portal</h2>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="section-label block mb-3">Username</label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground"
+              />
+            </div>
+            
+            <div>
+              <label className="section-label block mb-3">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground"
+              />
+            </div>
+            
+            {error && (
+              <p className="text-destructive text-sm text-center">{error}</p>
+            )}
+            
+            <button
+              type="submit"
+              className="w-full btn-minimal justify-center mt-8"
+            >
+              Enter
+            </button>
+          </form>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
