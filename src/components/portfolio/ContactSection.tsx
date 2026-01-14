@@ -1,95 +1,93 @@
 import React from 'react';
 import { usePortfolio } from '@/contexts/PortfolioContext';
-import { Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
+import { Mail, ArrowUpRight } from 'lucide-react';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 const ContactSection: React.FC = () => {
   const { data } = usePortfolio();
   const { contact } = data;
 
   return (
-    <section id="contact" className="py-24 md:py-32 bg-secondary/30">
+    <section id="contact" className="py-32 md:py-40 border-t border-border/30">
       <div className="container px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-3xl mx-auto text-center">
           {/* Header */}
-          <div className="text-center mb-16">
-            <span className="text-primary font-medium tracking-wider uppercase text-sm mb-4 block">
-              Get In Touch
-            </span>
-            <h2 className="section-heading font-serif mb-6">
-              Let's Work Together
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-primary to-gold-light mx-auto mb-8" />
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Have a project in mind? Let's discuss how we can bring your ideas to life.
-            </p>
-          </div>
+          <ScrollReveal>
+            <span className="section-label mb-6 block">Contact</span>
+          </ScrollReveal>
           
-          {/* Contact Info */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
+          <ScrollReveal delay={0.1}>
+            <h2 className="section-heading mb-8">Let's Connect</h2>
+          </ScrollReveal>
+          
+          <ScrollReveal delay={0.2}>
+            <div className="divider mx-auto mb-12" />
+          </ScrollReveal>
+          
+          <ScrollReveal delay={0.3}>
+            <p className="text-muted-foreground leading-relaxed mb-12 max-w-xl mx-auto">
+              Interested in working together? I'd love to hear from you.
+            </p>
+          </ScrollReveal>
+          
+          {/* Email CTA */}
+          <ScrollReveal delay={0.4}>
             <a 
               href={`mailto:${contact.email}`}
-              className="flex flex-col items-center p-6 bg-card rounded-2xl border border-border hover:border-primary transition-all duration-300 group card-hover"
+              className="inline-flex items-center gap-3 text-2xl md:text-3xl font-light tracking-wide text-primary hover:opacity-70 transition-opacity duration-300 mb-16"
             >
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <Mail className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm text-muted-foreground mb-1">Email</span>
-              <span className="font-medium text-foreground">{contact.email}</span>
+              <Mail className="w-6 h-6" />
+              {contact.email}
             </a>
-            
-            <a 
-              href={`tel:${contact.phone}`}
-              className="flex flex-col items-center p-6 bg-card rounded-2xl border border-border hover:border-primary transition-all duration-300 group card-hover"
-            >
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                <Phone className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm text-muted-foreground mb-1">Phone</span>
-              <span className="font-medium text-foreground">{contact.phone}</span>
-            </a>
-            
-            <div className="flex flex-col items-center p-6 bg-card rounded-2xl border border-border">
-              <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                <MapPin className="w-6 h-6 text-primary" />
-              </div>
-              <span className="text-sm text-muted-foreground mb-1">Location</span>
-              <span className="font-medium text-foreground">{contact.location}</span>
+          </ScrollReveal>
+          
+          {/* Details */}
+          <ScrollReveal delay={0.5}>
+            <div className="flex flex-wrap justify-center gap-8 text-sm text-muted-foreground mb-12">
+              <span>{contact.phone}</span>
+              <span className="hidden sm:block">·</span>
+              <span>{contact.location}</span>
             </div>
-          </div>
+          </ScrollReveal>
           
           {/* Social Links */}
-          <div className="flex justify-center gap-4">
-            {contact.social.linkedin && (
-              <a 
-                href={contact.social.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all duration-300 hover:scale-110"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-            )}
-            {contact.social.github && (
-              <a 
-                href={contact.social.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all duration-300 hover:scale-110"
-              >
-                <Github className="w-5 h-5" />
-              </a>
-            )}
-            {contact.social.twitter && (
-              <a 
-                href={contact.social.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-12 h-12 bg-card border border-border rounded-full flex items-center justify-center hover:border-primary hover:text-primary transition-all duration-300 hover:scale-110"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-            )}
-          </div>
+          <ScrollReveal delay={0.6}>
+            <div className="flex justify-center gap-8">
+              {contact.social.linkedin && (
+                <a 
+                  href={contact.social.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 link-underline inline-flex items-center gap-1"
+                >
+                  LinkedIn
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+              )}
+              {contact.social.github && (
+                <a 
+                  href={contact.social.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 link-underline inline-flex items-center gap-1"
+                >
+                  GitHub
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+              )}
+              {contact.social.twitter && (
+                <a 
+                  href={contact.social.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm uppercase tracking-widest text-muted-foreground hover:text-primary transition-colors duration-300 link-underline inline-flex items-center gap-1"
+                >
+                  Twitter
+                  <ArrowUpRight className="w-3 h-3" />
+                </a>
+              )}
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

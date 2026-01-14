@@ -23,6 +23,11 @@ export interface PortfolioData {
   };
   projects: Project[];
   skills: string[];
+  resume: {
+    description: string;
+    file: string;
+    filename: string;
+  };
   contact: {
     email: string;
     phone: string;
@@ -38,42 +43,47 @@ export interface PortfolioData {
 const defaultData: PortfolioData = {
   hero: {
     name: "John Doe",
-    title: "Creative Developer",
-    subtitle: "Crafting digital experiences with passion and precision",
+    title: "Creative Developer & Designer",
+    subtitle: "Crafting minimal, elegant digital experiences with attention to detail and a passion for clean aesthetics.",
     image: "",
   },
   about: {
-    title: "About Me",
-    description: "I'm a passionate developer with over 5 years of experience creating beautiful, functional, and user-friendly websites and applications. I specialize in modern web technologies and love bringing creative ideas to life through code.",
+    title: "Blending creativity with precision",
+    description: "With over 5 years of experience in digital design and development, I specialize in creating thoughtful, user-centered experiences that balance aesthetics with functionality.\n\nMy approach is rooted in simplicity—removing the unnecessary to highlight what truly matters. Every project is an opportunity to solve problems elegantly while pushing creative boundaries.",
     image: "",
   },
   projects: [
     {
       id: "1",
-      title: "E-Commerce Platform",
-      description: "A modern e-commerce solution with seamless user experience",
+      title: "Minimal Commerce",
+      description: "A refined e-commerce experience focusing on product presentation and seamless user journeys",
       image: "",
-      tags: ["React", "Node.js", "MongoDB"],
+      tags: ["React", "Node.js", "Stripe"],
       link: "#",
     },
     {
       id: "2",
-      title: "Portfolio Dashboard",
-      description: "Analytics dashboard for investment portfolios",
+      title: "Analytics Dashboard",
+      description: "Data visualization platform with emphasis on clarity and actionable insights",
       image: "",
       tags: ["TypeScript", "D3.js", "PostgreSQL"],
       link: "#",
     },
     {
       id: "3",
-      title: "Social Media App",
-      description: "Connect and share with friends worldwide",
+      title: "Creative Portfolio",
+      description: "Bespoke portfolio showcasing architectural photography with immersive galleries",
       image: "",
-      tags: ["React Native", "Firebase", "Redux"],
+      tags: ["Next.js", "Framer Motion", "Sanity"],
       link: "#",
     },
   ],
-  skills: ["React", "TypeScript", "Node.js", "Python", "PostgreSQL", "MongoDB", "AWS", "Docker", "Figma", "Git"],
+  skills: ["React", "TypeScript", "Node.js", "Python", "PostgreSQL", "AWS", "Figma", "Framer", "Three.js", "Docker"],
+  resume: {
+    description: "Download my resume to explore my professional journey, education, and the projects that have shaped my expertise.",
+    file: "",
+    filename: "",
+  },
   contact: {
     email: "hello@johndoe.com",
     phone: "+1 (555) 123-4567",
@@ -99,7 +109,11 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [data, setData] = useState<PortfolioData>(() => {
     const saved = localStorage.getItem('portfolioData');
-    return saved ? JSON.parse(saved) : defaultData;
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return { ...defaultData, ...parsed };
+    }
+    return defaultData;
   });
   
   const [isAdmin, setIsAdmin] = useState(() => {
@@ -115,7 +129,6 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
   };
 
   const login = (username: string, password: string): boolean => {
-    // Credentials check - not visible in UI
     if (username === "Muralikanthan R" && password === "jackass") {
       setIsAdmin(true);
       localStorage.setItem('isAdmin', 'true');

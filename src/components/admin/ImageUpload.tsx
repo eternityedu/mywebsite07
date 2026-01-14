@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Upload, X, Image } from 'lucide-react';
+import { X, Image } from 'lucide-react';
 
 interface ImageUploadProps {
   value: string;
@@ -29,12 +29,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label }) => 
   };
 
   return (
-    <div className="space-y-2">
-      {label && <label className="block text-sm font-medium">{label}</label>}
+    <div className="space-y-3">
+      {label && <label className="section-label block">{label}</label>}
       
       <div className="relative">
         {value ? (
-          <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
+          <div className="relative aspect-video overflow-hidden bg-secondary border border-border">
             <img 
               src={value} 
               alt="Preview" 
@@ -42,7 +42,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label }) => 
             />
             <button
               onClick={handleRemove}
-              className="absolute top-2 right-2 p-2 bg-destructive text-destructive-foreground rounded-full hover:bg-destructive/90 transition-colors"
+              className="absolute top-3 right-3 p-2 bg-background/80 backdrop-blur-sm text-foreground rounded-full hover:bg-destructive hover:text-destructive-foreground transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -50,14 +50,12 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label }) => 
         ) : (
           <button
             onClick={() => inputRef.current?.click()}
-            className="w-full aspect-video border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer"
+            className="w-full aspect-video border border-dashed border-border flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-all cursor-pointer"
           >
-            <div className="w-12 h-12 bg-muted rounded-full flex items-center justify-center">
-              <Image className="w-6 h-6 text-muted-foreground" />
-            </div>
+            <Image className="w-8 h-8 text-muted-foreground" />
             <div className="text-center">
-              <p className="text-sm font-medium">Click to upload</p>
-              <p className="text-xs text-muted-foreground">PNG, JPG, GIF up to 10MB</p>
+              <p className="text-sm">Click to upload</p>
+              <p className="text-xs text-muted-foreground">PNG, JPG up to 10MB</p>
             </div>
           </button>
         )}

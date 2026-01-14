@@ -1,85 +1,85 @@
 import React from 'react';
 import { usePortfolio } from '@/contexts/PortfolioContext';
-import { ExternalLink } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import ScrollReveal from '@/components/animations/ScrollReveal';
 
 const ProjectsSection: React.FC = () => {
   const { data } = usePortfolio();
   const { projects } = data;
 
   return (
-    <section id="projects" className="py-24 md:py-32 bg-secondary/30">
+    <section id="projects" className="py-32 md:py-40">
       <div className="container px-6">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-16">
-            <span className="text-primary font-medium tracking-wider uppercase text-sm mb-4 block">
-              Portfolio
-            </span>
-            <h2 className="section-heading font-serif mb-6">
-              Featured Projects
-            </h2>
-            <div className="w-20 h-1 bg-gradient-to-r from-primary to-gold-light mx-auto" />
+          <div className="text-center mb-20">
+            <ScrollReveal>
+              <span className="section-label mb-6 block">Portfolio</span>
+            </ScrollReveal>
+            <ScrollReveal delay={0.1}>
+              <h2 className="section-heading mb-8">Selected Work</h2>
+            </ScrollReveal>
+            <ScrollReveal delay={0.2}>
+              <div className="divider mx-auto" />
+            </ScrollReveal>
           </div>
           
-          {/* Projects Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Projects List */}
+          <div className="space-y-16">
             {projects.map((project, index) => (
-              <article 
-                key={project.id}
-                className="group bg-card rounded-2xl overflow-hidden card-hover"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Image */}
-                <div className="aspect-video relative overflow-hidden bg-muted">
-                  {project.image ? (
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-primary/20 to-secondary flex items-center justify-center">
-                      <span className="text-4xl">🚀</span>
-                    </div>
-                  )}
+              <ScrollReveal key={project.id} delay={index * 0.1}>
+                <article className="group grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                  {/* Image */}
+                  <div className={`aspect-[16/10] overflow-hidden elegant-border ${index % 2 === 1 ? 'md:order-2' : ''}`}>
+                    {project.image ? (
+                      <img 
+                        src={project.image} 
+                        alt={project.title}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-secondary to-muted flex items-center justify-center">
+                        <span className="text-4xl opacity-20">✦</span>
+                      </div>
+                    )}
+                  </div>
                   
-                  {/* Overlay on hover */}
-                  <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  {/* Content */}
+                  <div className={`${index % 2 === 1 ? 'md:order-1 md:text-right' : ''}`}>
+                    <span className="section-label mb-4 block">0{index + 1}</span>
+                    <h3 className="text-3xl md:text-4xl font-light mb-4 tracking-wide">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                      {project.description}
+                    </p>
+                    
+                    {/* Tags */}
+                    <div className={`flex flex-wrap gap-3 mb-6 ${index % 2 === 1 ? 'md:justify-end' : ''}`}>
+                      {project.tags.map((tag) => (
+                        <span 
+                          key={tag}
+                          className="text-[10px] uppercase tracking-widest text-muted-foreground border border-border px-3 py-1"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    
                     {project.link && (
                       <a 
                         href={project.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-4 bg-primary text-primary-foreground rounded-full hover:scale-110 transition-transform"
+                        className="inline-flex items-center gap-2 text-primary link-underline text-sm tracking-widest uppercase"
                       >
-                        <ExternalLink className="w-6 h-6" />
+                        View Project
+                        <ArrowUpRight className="w-4 h-4" />
                       </a>
                     )}
                   </div>
-                </div>
-                
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-serif font-semibold mb-2 group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-                  
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span 
-                        key={tag}
-                        className="px-3 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </article>
+                </article>
+              </ScrollReveal>
             ))}
           </div>
         </div>

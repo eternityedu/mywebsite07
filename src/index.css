@@ -2,74 +2,74 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap');
 
 @layer base {
   :root {
-    --background: 20 14% 4%;
-    --foreground: 40 40% 95%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 93%;
 
-    --card: 20 10% 8%;
-    --card-foreground: 40 40% 95%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 93%;
 
-    --popover: 20 10% 8%;
-    --popover-foreground: 40 40% 95%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 93%;
 
-    --primary: 38 92% 50%;
-    --primary-foreground: 20 14% 4%;
+    --primary: 40 30% 70%;
+    --primary-foreground: 0 0% 3%;
 
-    --secondary: 20 10% 12%;
-    --secondary-foreground: 40 40% 95%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 93%;
 
-    --muted: 20 10% 15%;
-    --muted-foreground: 40 10% 55%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 50%;
 
-    --accent: 38 92% 50%;
-    --accent-foreground: 20 14% 4%;
+    --accent: 40 30% 70%;
+    --accent-foreground: 0 0% 3%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 40 40% 95%;
+    --destructive-foreground: 0 0% 93%;
 
-    --border: 40 10% 18%;
-    --input: 40 10% 18%;
-    --ring: 38 92% 50%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 40 30% 70%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
-    --gold: 38 92% 50%;
-    --gold-light: 40 90% 65%;
-    --gold-dark: 35 85% 40%;
+    --gold: 40 30% 70%;
+    --gold-light: 42 35% 80%;
+    --gold-dark: 38 25% 55%;
 
-    --sidebar-background: 20 10% 6%;
-    --sidebar-foreground: 40 40% 95%;
-    --sidebar-primary: 38 92% 50%;
-    --sidebar-primary-foreground: 20 14% 4%;
-    --sidebar-accent: 20 10% 12%;
-    --sidebar-accent-foreground: 40 40% 95%;
-    --sidebar-border: 40 10% 15%;
-    --sidebar-ring: 38 92% 50%;
+    --sidebar-background: 0 0% 5%;
+    --sidebar-foreground: 0 0% 93%;
+    --sidebar-primary: 40 30% 70%;
+    --sidebar-primary-foreground: 0 0% 3%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 0 0% 93%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 40 30% 70%;
   }
 
   .dark {
-    --background: 20 14% 4%;
-    --foreground: 40 40% 95%;
-    --card: 20 10% 8%;
-    --card-foreground: 40 40% 95%;
-    --popover: 20 10% 8%;
-    --popover-foreground: 40 40% 95%;
-    --primary: 38 92% 50%;
-    --primary-foreground: 20 14% 4%;
-    --secondary: 20 10% 12%;
-    --secondary-foreground: 40 40% 95%;
-    --muted: 20 10% 15%;
-    --muted-foreground: 40 10% 55%;
-    --accent: 38 92% 50%;
-    --accent-foreground: 20 14% 4%;
+    --background: 0 0% 3%;
+    --foreground: 0 0% 93%;
+    --card: 0 0% 6%;
+    --card-foreground: 0 0% 93%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 93%;
+    --primary: 40 30% 70%;
+    --primary-foreground: 0 0% 3%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 93%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 50%;
+    --accent: 40 30% 70%;
+    --accent-foreground: 0 0% 3%;
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 40 40% 95%;
-    --border: 40 10% 18%;
-    --input: 40 10% 18%;
-    --ring: 38 92% 50%;
+    --destructive-foreground: 0 0% 93%;
+    --border: 0 0% 12%;
+    --input: 0 0% 12%;
+    --ring: 40 30% 70%;
   }
 }
 
@@ -79,12 +79,16 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
     font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    letter-spacing: 0.02em;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    letter-spacing: 0.04em;
   }
 }
 
@@ -93,46 +97,53 @@
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-[hsl(var(--gold-light))] to-primary;
   }
 
+  .section-label {
+    @apply text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-medium;
+  }
+
   .section-heading {
-    @apply text-4xl md:text-5xl font-bold tracking-tight;
+    @apply text-4xl md:text-5xl lg:text-6xl font-light tracking-wide;
   }
 
-  .card-hover {
-    @apply transition-all duration-500 hover:shadow-[0_20px_60px_-15px_hsl(var(--gold)/0.2)] hover:-translate-y-2;
+  .elegant-border {
+    @apply border border-border/50;
   }
 
-  .gold-glow {
-    box-shadow: 0 0 60px -15px hsl(var(--gold) / 0.4);
+  .card-minimal {
+    @apply bg-card/50 backdrop-blur-sm border border-border/30 transition-all duration-500;
   }
 
-  .border-gold-gradient {
-    border-image: linear-gradient(135deg, hsl(var(--gold)), hsl(var(--gold-dark))) 1;
+  .card-minimal:hover {
+    @apply border-primary/30;
+  }
+
+  .btn-minimal {
+    @apply inline-flex items-center gap-3 px-8 py-4 border border-primary/50 text-primary font-light tracking-widest text-xs uppercase transition-all duration-500 hover:bg-primary hover:text-primary-foreground;
+  }
+
+  .btn-solid {
+    @apply inline-flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-light tracking-widest text-xs uppercase transition-all duration-500 hover:bg-primary/90;
+  }
+
+  .divider {
+    @apply w-16 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent;
+  }
+
+  .link-underline {
+    @apply relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-px after:bg-primary after:transition-all after:duration-500 hover:after:w-full;
   }
 }
 
 @layer utilities {
+  .animate-fade-up {
+    animation: fadeUp 1s ease-out forwards;
+  }
+
   .animate-fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
+    animation: fadeIn 1s ease-out forwards;
   }
 
-  .animate-slide-up {
-    animation: slideUp 0.8s ease-out forwards;
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  @keyframes slideUp {
+  @keyframes fadeUp {
     from {
       opacity: 0;
       transform: translateY(30px);
@@ -143,12 +154,12 @@
     }
   }
 
-  @keyframes float {
-    0%, 100% {
-      transform: translateY(0);
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
     }
-    50% {
-      transform: translateY(-20px);
+    to {
+      opacity: 1;
     }
   }
 }
