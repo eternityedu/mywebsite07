@@ -1,5 +1,7 @@
-import React, { useRef } from 'react';
-import { Upload, X, FileText } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { Upload, X, FileText, Loader2 } from 'lucide-react';
+import { uploadFile } from '@/lib/supabase-storage';
+import { toast } from 'sonner';
 
 interface FileUploadProps {
   value: string;
@@ -9,30 +11,27 @@ interface FileUploadProps {
   accept?: string;
 }
 
-const FileUpload: React.FC<FileUploadProps> = ({ 
-  value, 
-  filename, 
-  onChange, 
-  label,
-  accept = ".pdf,.doc,.docx" 
-}) => {
+const FileUpload: React.FC<FileUploadProps> = ({ value, filename, onChange, label, accept = ".pdf,.doc,.docx" }) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        onChange(reader.result as string, file.name);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    if (!file) return;
 
-  const handleRemove = () => {
-    onChange('', '');
-    if (inputRef.current) {
-      inputRef.current.value = '';
+    setUploading(true);
+    try {
+      const url = await uploadFile(file, 'documents');
+      if (url) {
+        onChange(url, file.name);
+        toast.success('File uploaded');
+      } else {
+        toast.error('Upload failed');
+      }
+    } catch {
+      toast.error('Upload failed');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -47,33 +46,29 @@ const FileUpload: React.FC<FileUploadProps> = ({
               <FileText className="w-5 h-5 text-primary" />
               <span className="text-sm truncate max-w-[200px]">{filename}</span>
             </div>
-            <button
-              onClick={handleRemove}
-              className="p-2 text-muted-foreground hover:text-destructive transition-colors"
-            >
+            <button onClick={() => onChange('', '')} className="p-2 text-muted-foreground hover:text-destructive transition-colors">
               <X className="w-4 h-4" />
             </button>
           </div>
         ) : (
           <button
             onClick={() => inputRef.current?.click()}
-            className="w-full p-6 border border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-all cursor-pointer"
+            disabled={uploading}
+            className="w-full p-6 border border-dashed border-border rounded-lg flex flex-col items-center justify-center gap-3 hover:border-primary/50 transition-all cursor-pointer disabled:opacity-50"
           >
-            <Upload className="w-6 h-6 text-muted-foreground" />
-            <div className="text-center">
-              <p className="text-sm">Click to upload</p>
-              <p className="text-xs text-muted-foreground">PDF, DOC up to 10MB</p>
-            </div>
+            {uploading ? <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" /> : (
+              <>
+                <Upload className="w-6 h-6 text-muted-foreground" />
+                <div className="text-center">
+                  <p className="text-sm">Click to upload</p>
+                  <p className="text-xs text-muted-foreground">PDF, DOC up to 10MB</p>
+                </div>
+              </>
+            )}
           </button>
         )}
         
-        <input
-          ref={inputRef}
-          type="file"
-          accept={accept}
-          onChange={handleFileChange}
-          className="hidden"
-        />
+        <input ref={inputRef} type="file" accept={accept} onChange={handleFileChange} className="hidden" />
       </div>
     </div>
   );

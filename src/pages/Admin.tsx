@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio, Project } from '@/contexts/PortfolioContext';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, FileText } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, FileText, BookOpen, Link as LinkIcon } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 import FileUpload from '@/components/admin/FileUpload';
+import BlogManager from '@/components/admin/BlogManager';
+import SocialLinksManager from '@/components/admin/SocialLinksManager';
 
 const Admin: React.FC = () => {
   const { data, updateData, isAdmin } = usePortfolio();
@@ -81,7 +83,7 @@ const Admin: React.FC = () => {
     }));
   };
 
-  const updateProject = (id: string, key: string, value: any) => {
+  const updateProject = (id: string, key: string, value: string | string[]) => {
     setLocalData(prev => ({
       ...prev,
       projects: prev.projects.map(p => 
@@ -108,6 +110,8 @@ const Admin: React.FC = () => {
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'skills', label: 'Skills', icon: Code },
     { id: 'resume', label: 'Resume', icon: FileText },
+    { id: 'blog', label: 'Blog', icon: BookOpen },
+    { id: 'links', label: 'Links', icon: LinkIcon },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
 
@@ -117,45 +121,45 @@ const Admin: React.FC = () => {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/30">
-        <div className="container px-6">
-          <div className="flex items-center justify-between h-16">
+        <div className="container px-4 sm:px-6">
+          <div className="flex items-center justify-between h-14 sm:h-16">
             <button
               onClick={() => navigate('/')}
               className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back</span>
+              <span className="hidden sm:inline">Back</span>
             </button>
             
             <span className="section-label">Dashboard</span>
             
             <button
               onClick={handleSave}
-              className="btn-minimal py-2 px-4"
+              className="btn-minimal py-2 px-3 sm:px-4"
             >
               <Save className="w-3 h-3" />
-              <span>{saved ? 'Saved' : 'Save'}</span>
+              <span className="hidden sm:inline">{saved ? 'Saved' : 'Save'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="container px-6 py-12">
-        <div className="flex gap-12">
-          {/* Sidebar */}
-          <aside className="w-48 shrink-0">
-            <nav className="space-y-1">
+      <div className="container px-4 sm:px-6 py-6 sm:py-12">
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12">
+          {/* Sidebar - horizontal scroll on mobile */}
+          <aside className="lg:w-48 shrink-0 -mx-4 sm:mx-0">
+            <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible px-4 sm:px-0 pb-4 lg:pb-0">
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-sm transition-colors ${
+                  className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm transition-colors whitespace-nowrap ${
                     activeTab === tab.id 
-                      ? 'text-primary border-l border-primary' 
-                      : 'text-muted-foreground hover:text-foreground border-l border-transparent'
+                      ? 'text-primary lg:border-l lg:border-primary bg-primary/5 lg:bg-transparent rounded lg:rounded-none' 
+                      : 'text-muted-foreground hover:text-foreground lg:border-l lg:border-transparent'
                   }`}
                 >
-                  <tab.icon className="w-4 h-4" />
+                  <tab.icon className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>{tab.label}</span>
                 </button>
               ))}
@@ -166,10 +170,10 @@ const Admin: React.FC = () => {
           <main className="flex-1 max-w-2xl">
             {/* Hero Tab */}
             {activeTab === 'hero' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <span className="section-label mb-2 block">Hero Section</span>
-                  <h2 className="text-3xl font-light tracking-wide">Main Introduction</h2>
+                  <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Main Introduction</h2>
                 </div>
                 
                 <ImageUpload
@@ -184,7 +188,7 @@ const Admin: React.FC = () => {
                     type="text"
                     value={localData.hero.name}
                     onChange={(e) => updateHero('name', e.target.value)}
-                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-lg"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-base sm:text-lg"
                   />
                 </div>
                 
@@ -212,10 +216,10 @@ const Admin: React.FC = () => {
 
             {/* About Tab */}
             {activeTab === 'about' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <span className="section-label mb-2 block">About Section</span>
-                  <h2 className="text-3xl font-light tracking-wide">Your Story</h2>
+                  <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Your Story</h2>
                 </div>
                 
                 <ImageUpload
@@ -230,7 +234,7 @@ const Admin: React.FC = () => {
                     type="text"
                     value={localData.about.title}
                     onChange={(e) => updateAbout('title', e.target.value)}
-                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-lg"
+                    className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-base sm:text-lg"
                   />
                 </div>
                 
@@ -248,24 +252,24 @@ const Admin: React.FC = () => {
 
             {/* Projects Tab */}
             {activeTab === 'projects' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div className="flex items-end justify-between">
                   <div>
                     <span className="section-label mb-2 block">Projects Section</span>
-                    <h2 className="text-3xl font-light tracking-wide">Your Work</h2>
+                    <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Your Work</h2>
                   </div>
                   <button
                     onClick={addProject}
-                    className="btn-minimal py-2 px-4"
+                    className="btn-minimal py-2 px-3 sm:px-4"
                   >
                     <Plus className="w-3 h-3" />
-                    Add
+                    <span className="hidden sm:inline">Add</span>
                   </button>
                 </div>
                 
-                <div className="space-y-8">
+                <div className="space-y-6 sm:space-y-8">
                   {localData.projects.map((project, index) => (
-                    <div key={project.id} className="p-6 border border-border/50 space-y-6">
+                    <div key={project.id} className="p-4 sm:p-6 border border-border/50 space-y-4 sm:space-y-6">
                       <div className="flex items-center justify-between">
                         <span className="section-label">Project {index + 1}</span>
                         <button
@@ -330,10 +334,10 @@ const Admin: React.FC = () => {
 
             {/* Skills Tab */}
             {activeTab === 'skills' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <span className="section-label mb-2 block">Skills Section</span>
-                  <h2 className="text-3xl font-light tracking-wide">Your Expertise</h2>
+                  <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Your Expertise</h2>
                 </div>
                 
                 <div>
@@ -347,9 +351,9 @@ const Admin: React.FC = () => {
                   />
                 </div>
                 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   {localData.skills.map(skill => (
-                    <span key={skill} className="px-4 py-2 text-xs uppercase tracking-widest border border-primary/30 text-primary">
+                    <span key={skill} className="px-3 sm:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs uppercase tracking-widest border border-primary/30 text-primary">
                       {skill}
                     </span>
                   ))}
@@ -359,10 +363,10 @@ const Admin: React.FC = () => {
 
             {/* Resume Tab */}
             {activeTab === 'resume' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <span className="section-label mb-2 block">Resume Section</span>
-                  <h2 className="text-3xl font-light tracking-wide">Your CV</h2>
+                  <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Your CV</h2>
                 </div>
                 
                 <div>
@@ -390,12 +394,18 @@ const Admin: React.FC = () => {
               </div>
             )}
 
+            {/* Blog Tab */}
+            {activeTab === 'blog' && <BlogManager />}
+
+            {/* Links Tab */}
+            {activeTab === 'links' && <SocialLinksManager />}
+
             {/* Contact Tab */}
             {activeTab === 'contact' && (
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div>
                   <span className="section-label mb-2 block">Contact Section</span>
-                  <h2 className="text-3xl font-light tracking-wide">Get in Touch</h2>
+                  <h2 className="text-2xl sm:text-3xl font-light tracking-wide">Get in Touch</h2>
                 </div>
                 
                 <div>
@@ -428,15 +438,15 @@ const Admin: React.FC = () => {
                   />
                 </div>
                 
-                <div className="pt-8 border-t border-border/30">
-                  <span className="section-label mb-6 block">Social Links</span>
+                <div className="pt-6 sm:pt-8 border-t border-border/30">
+                  <span className="section-label mb-4 sm:mb-6 block">Default Social Links</span>
                   
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
                       <label className="section-label block mb-3">LinkedIn</label>
                       <input
                         type="url"
-                        value={localData.contact.social.linkedin || ''}
+                        value={localData.contact.social?.linkedin || ''}
                         onChange={(e) => updateSocial('linkedin', e.target.value)}
                         className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://linkedin.com/in/..."
@@ -447,7 +457,7 @@ const Admin: React.FC = () => {
                       <label className="section-label block mb-3">GitHub</label>
                       <input
                         type="url"
-                        value={localData.contact.social.github || ''}
+                        value={localData.contact.social?.github || ''}
                         onChange={(e) => updateSocial('github', e.target.value)}
                         className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://github.com/..."
@@ -458,7 +468,7 @@ const Admin: React.FC = () => {
                       <label className="section-label block mb-3">Twitter</label>
                       <input
                         type="url"
-                        value={localData.contact.social.twitter || ''}
+                        value={localData.contact.social?.twitter || ''}
                         onChange={(e) => updateSocial('twitter', e.target.value)}
                         className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors"
                         placeholder="https://twitter.com/..."
