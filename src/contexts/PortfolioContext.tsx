@@ -40,7 +40,7 @@ export interface PortfolioData {
   };
 }
 
-const defaultData: PortfolioData = {
+export const defaultData: PortfolioData = {
   hero: {
     name: "John Doe",
     title: "Creative Developer & Designer",

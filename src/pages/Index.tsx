@@ -5,6 +5,7 @@ import AboutSection from '@/components/portfolio/AboutSection';
 import ProjectsSection from '@/components/portfolio/ProjectsSection';
 import SkillsSection from '@/components/portfolio/SkillsSection';
 import ResumeSection from '@/components/portfolio/ResumeSection';
+import BlogSection from '@/components/portfolio/BlogSection';
 import ContactSection from '@/components/portfolio/ContactSection';
 import Footer from '@/components/portfolio/Footer';
 
@@ -17,6 +18,7 @@ const Index: React.FC = () => {
       <ProjectsSection />
       <SkillsSection />
       <ResumeSection />
+      <BlogSection />
       <ContactSection />
       <Footer />
     </div>
