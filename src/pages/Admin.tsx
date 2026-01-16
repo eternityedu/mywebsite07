@@ -8,17 +8,17 @@ import BlogManager from '@/components/admin/BlogManager';
 import SocialLinksManager from '@/components/admin/SocialLinksManager';
 
 const Admin: React.FC = () => {
-  const { data, updateData, isAdmin } = usePortfolio();
+  const { data, updateData, isAdmin, loading } = usePortfolio();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('hero');
   const [localData, setLocalData] = useState(data);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (!isAdmin) {
-      navigate('/');
+    if (!loading && !isAdmin) {
+      navigate('/auth');
     }
-  }, [isAdmin, navigate]);
+  }, [isAdmin, loading, navigate]);
 
   useEffect(() => {
     setLocalData(data);

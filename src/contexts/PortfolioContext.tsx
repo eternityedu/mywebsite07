@@ -1,4 +1,7 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
+import type { Json } from '@/integrations/supabase/types';
 
 export interface Project {
   id: string;
@@ -98,52 +101,75 @@ export const defaultData: PortfolioData = {
 
 interface PortfolioContextType {
   data: PortfolioData;
-  updateData: (newData: Partial<PortfolioData>) => void;
+  updateData: (newData: Partial<PortfolioData>) => Promise<void>;
   isAdmin: boolean;
-  login: (username: string, password: string) => boolean;
-  logout: () => void;
+  loading: boolean;
+  logout: () => Promise<void>;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
 export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [data, setData] = useState<PortfolioData>(() => {
-    const saved = localStorage.getItem('portfolioData');
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return { ...defaultData, ...parsed };
+  const [data, setData] = useState<PortfolioData>(defaultData);
+  const [loading, setLoading] = useState(true);
+  const { isAdmin, signOut, loading: authLoading } = useAuth();
+
+  const fetchData = useCallback(async () => {
+    try {
+      const { data: rows, error } = await supabase
+        .from('portfolio_data')
+        .select('key, value');
+
+      if (error) throw error;
+
+      if (rows && rows.length > 0) {
+        const merged = { ...defaultData };
+        rows.forEach((row: { key: string; value: Json }) => {
+          if (row.key in merged) {
+            (merged as Record<string, unknown>)[row.key] = row.value;
+          }
+        });
+        setData(merged);
+      }
+    } catch (error) {
+      console.error('Error fetching portfolio data:', error);
+    } finally {
+      setLoading(false);
     }
-    return defaultData;
-  });
-  
-  const [isAdmin, setIsAdmin] = useState(() => {
-    return localStorage.getItem('isAdmin') === 'true';
-  });
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem('portfolioData', JSON.stringify(data));
-  }, [data]);
+    fetchData();
+  }, [fetchData]);
 
-  const updateData = (newData: Partial<PortfolioData>) => {
-    setData(prev => ({ ...prev, ...newData }));
-  };
+  const updateData = async (newData: Partial<PortfolioData>) => {
+    const updated = { ...data, ...newData };
+    setData(updated);
 
-  const login = (username: string, password: string): boolean => {
-    if (username === "Muralikanthan R" && password === "jackass") {
-      setIsAdmin(true);
-      localStorage.setItem('isAdmin', 'true');
-      return true;
+    // Save to Supabase (only works for admins due to RLS)
+    try {
+      for (const [key, value] of Object.entries(newData)) {
+        await supabase
+          .from('portfolio_data')
+          .upsert({ key, value: value as Json }, { onConflict: 'key' });
+      }
+    } catch (error) {
+      console.error('Error saving to database:', error);
     }
-    return false;
   };
 
-  const logout = () => {
-    setIsAdmin(false);
-    localStorage.removeItem('isAdmin');
+  const logout = async () => {
+    await signOut();
   };
 
   return (
-    <PortfolioContext.Provider value={{ data, updateData, isAdmin, login, logout }}>
+    <PortfolioContext.Provider value={{ 
+      data, 
+      updateData, 
+      isAdmin, 
+      loading: loading || authLoading,
+      logout 
+    }}>
       {children}
     </PortfolioContext.Provider>
   );
