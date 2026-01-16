@@ -1,82 +1,85 @@
 import React from 'react';
 import { useBlogPosts } from '@/hooks/useBlogPosts';
 import ScrollReveal from '@/components/animations/ScrollReveal';
-import { Calendar, ArrowRight } from 'lucide-react';
-import { format } from 'date-fns';
+import { Calendar } from 'lucide-react';
 
 const BlogSection: React.FC = () => {
-  const { posts, loading } = useBlogPosts(true);
+  const { posts, loading } = useBlogPosts();
+
+  // Only show published posts
+  const publishedPosts = posts.filter(post => post.published);
 
   if (loading) {
     return (
-      <section id="blog" className="py-24 md:py-32">
-        <div className="container px-4 sm:px-6">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="animate-pulse h-8 bg-muted rounded w-48 mx-auto" />
+      <section id="blog" className="py-20 px-4 border-t border-border/30">
+        <div className="max-w-md mx-auto text-center">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-muted rounded w-24 mx-auto" />
+            <div className="h-8 bg-muted rounded w-48 mx-auto" />
           </div>
         </div>
       </section>
     );
   }
 
-  if (posts.length === 0) {
+  if (publishedPosts.length === 0) {
     return null;
   }
 
   return (
-    <section id="blog" className="py-24 md:py-32">
-      <div className="container px-4 sm:px-6">
-        <div className="max-w-5xl mx-auto">
+    <section id="blog" className="py-20 px-4 border-t border-border/30">
+      <div className="max-w-md mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
           <ScrollReveal>
-            <div className="text-center mb-16 md:mb-20">
-              <span className="section-label">Insights</span>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-light mt-4 tracking-wide">
-                Blog
-              </h2>
-            </div>
+            <span className="section-label mb-4 block">Insights</span>
           </ScrollReveal>
+          <ScrollReveal delay={0.1}>
+            <h2 className="text-2xl font-light tracking-wide mb-6">Blog</h2>
+          </ScrollReveal>
+          <ScrollReveal delay={0.2}>
+            <div className="divider mx-auto" />
+          </ScrollReveal>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {posts.map((post, index) => (
-              <ScrollReveal key={post.id} delay={index * 0.1}>
-                <article className="group elegant-border p-6 h-full flex flex-col">
-                  {post.cover_image && (
-                    <div className="aspect-video mb-6 overflow-hidden -mx-6 -mt-6">
-                      <img
-                        src={post.cover_image}
-                        alt={post.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    </div>
-                  )}
-                  
-                  <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                    <Calendar className="w-3 h-3" />
-                    <time className="text-xs uppercase tracking-widest">
-                      {format(new Date(post.created_at), 'MMM d, yyyy')}
-                    </time>
+        {/* Blog Posts */}
+        <div className="space-y-8">
+          {publishedPosts.map((post, index) => (
+            <ScrollReveal key={post.id} delay={index * 0.1}>
+              <article className="group">
+                {post.cover_image && (
+                  <div className="aspect-[16/9] mb-4 overflow-hidden elegant-border">
+                    <img
+                      src={post.cover_image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    />
                   </div>
-                  
-                  <h3 className="text-lg md:text-xl font-light mb-3 leading-snug">
-                    {post.title}
-                  </h3>
-                  
-                  {post.excerpt && (
-                    <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                      {post.excerpt}
-                    </p>
-                  )}
-                  
-                  <div className="mt-6 pt-4 border-t border-border/30">
-                    <button className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-primary hover:gap-3 transition-all">
-                      Read More
-                      <ArrowRight className="w-3 h-3" />
-                    </button>
-                  </div>
-                </article>
-              </ScrollReveal>
-            ))}
-          </div>
+                )}
+                
+                <div className="flex items-center gap-2 text-muted-foreground mb-3">
+                  <Calendar className="w-3 h-3" />
+                  <span className="text-[10px] uppercase tracking-widest">
+                    {new Date(post.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+                
+                <h3 className="text-lg font-light tracking-wide mb-2 group-hover:text-primary transition-colors">
+                  {post.title}
+                </h3>
+                
+                {post.excerpt && (
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                )}
+              </article>
+            </ScrollReveal>
+          ))}
         </div>
       </div>
     </section>

@@ -32,30 +32,17 @@ const Navbar: React.FC = () => {
         isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-border/30' : ''
       }`}
     >
-      <div className="container px-6">
-        <div className="flex items-center justify-between h-20">
+      <div className="px-4">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
-          <a href="#" className="text-lg tracking-[0.2em] uppercase font-light">
+          <a href="#" className="text-sm tracking-[0.15em] uppercase font-light">
             Portfolio
           </a>
           
-          {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-10">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors duration-300 link-underline"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-          
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - always show on mobile-first */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="p-2 text-foreground"
           >
             {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -68,15 +55,15 @@ const Navbar: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-border/30 overflow-hidden"
+              className="border-t border-border/30 overflow-hidden"
             >
-              <div className="py-6 space-y-4">
+              <div className="py-4 space-y-3">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-sm uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors"
+                    className="block text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2"
                   >
                     {link.label}
                   </a>
