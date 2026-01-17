@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import { useSimpleAuth } from '@/hooks/useSimpleAuth';
 import type { Json } from '@/integrations/supabase/types';
 
 export interface Project {
@@ -45,7 +45,7 @@ export interface PortfolioData {
 
 export const defaultData: PortfolioData = {
   hero: {
-    name: "John Doe",
+    name: "Muralikanthan R",
     title: "Creative Developer & Designer",
     subtitle: "Crafting minimal, elegant digital experiences with attention to detail and a passion for clean aesthetics.",
     image: "",
@@ -88,7 +88,7 @@ export const defaultData: PortfolioData = {
     filename: "",
   },
   contact: {
-    email: "hello@johndoe.com",
+    email: "hello@example.com",
     phone: "+1 (555) 123-4567",
     location: "San Francisco, CA",
     social: {
@@ -104,7 +104,7 @@ interface PortfolioContextType {
   updateData: (newData: Partial<PortfolioData>) => Promise<void>;
   isAdmin: boolean;
   loading: boolean;
-  logout: () => Promise<void>;
+  logout: () => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -112,7 +112,7 @@ const PortfolioContext = createContext<PortfolioContextType | undefined>(undefin
 export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [data, setData] = useState<PortfolioData>(defaultData);
   const [loading, setLoading] = useState(true);
-  const { isAdmin, signOut, loading: authLoading } = useAuth();
+  const { isAdmin, logout, loading: authLoading } = useSimpleAuth();
 
   const fetchData = useCallback(async () => {
     try {
@@ -146,7 +146,7 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
     const updated = { ...data, ...newData };
     setData(updated);
 
-    // Save to Supabase (only works for admins due to RLS)
+    // Save to Supabase
     try {
       for (const [key, value] of Object.entries(newData)) {
         await supabase
@@ -156,10 +156,6 @@ export const PortfolioProvider: React.FC<{ children: ReactNode }> = ({ children 
     } catch (error) {
       console.error('Error saving to database:', error);
     }
-  };
-
-  const logout = async () => {
-    await signOut();
   };
 
   return (

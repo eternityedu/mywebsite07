@@ -19,22 +19,22 @@ const ResumeSection: React.FC = () => {
   };
 
   return (
-    <section id="resume" className="py-20 px-4 border-t border-border/30">
-      <div className="max-w-md mx-auto text-center">
+    <section id="resume" className="py-16 px-3 border-t border-border/30">
+      <div className="w-full max-w-sm mx-auto text-center">
         <ScrollReveal>
-          <span className="section-label mb-4 block">Career</span>
+          <span className="section-label mb-3 block">Career</span>
         </ScrollReveal>
         
         <ScrollReveal delay={0.1}>
-          <h2 className="text-2xl font-light tracking-wide mb-6">Resume</h2>
+          <h2 className="text-xl font-light tracking-wide mb-4">Resume</h2>
         </ScrollReveal>
         
         <ScrollReveal delay={0.2}>
-          <div className="divider mx-auto mb-8" />
+          <div className="divider mx-auto mb-6" />
         </ScrollReveal>
         
         <ScrollReveal delay={0.3}>
-          <p className="text-sm text-muted-foreground mb-8 leading-relaxed">
+          <p className="text-xs text-muted-foreground mb-6 leading-relaxed">
             {resume.description}
           </p>
         </ScrollReveal>
@@ -43,13 +43,13 @@ const ResumeSection: React.FC = () => {
           {resume.file ? (
             <button
               onClick={handleDownload}
-              className="btn-minimal mx-auto"
+              className="btn-minimal mx-auto py-3 px-6 text-[10px]"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3 h-3" />
               <span>Download CV</span>
             </button>
           ) : (
-            <p className="text-xs text-muted-foreground italic">
+            <p className="text-[10px] text-muted-foreground italic">
               Resume available upon request
             </p>
           )}

@@ -11,11 +11,11 @@ const BlogSection: React.FC = () => {
 
   if (loading) {
     return (
-      <section id="blog" className="py-20 px-4 border-t border-border/30">
-        <div className="max-w-md mx-auto text-center">
-          <div className="animate-pulse space-y-4">
-            <div className="h-4 bg-muted rounded w-24 mx-auto" />
-            <div className="h-8 bg-muted rounded w-48 mx-auto" />
+      <section id="blog" className="py-16 px-3 border-t border-border/30">
+        <div className="w-full max-w-sm mx-auto text-center">
+          <div className="animate-pulse space-y-3">
+            <div className="h-3 bg-muted rounded w-20 mx-auto" />
+            <div className="h-6 bg-muted rounded w-32 mx-auto" />
           </div>
         </div>
       </section>
@@ -27,15 +27,15 @@ const BlogSection: React.FC = () => {
   }
 
   return (
-    <section id="blog" className="py-20 px-4 border-t border-border/30">
-      <div className="max-w-md mx-auto">
+    <section id="blog" className="py-16 px-3 border-t border-border/30">
+      <div className="w-full max-w-sm mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <ScrollReveal>
-            <span className="section-label mb-4 block">Insights</span>
+            <span className="section-label mb-3 block">Insights</span>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <h2 className="text-2xl font-light tracking-wide mb-6">Blog</h2>
+            <h2 className="text-xl font-light tracking-wide mb-4">Blog</h2>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <div className="divider mx-auto" />
@@ -43,12 +43,12 @@ const BlogSection: React.FC = () => {
         </div>
 
         {/* Blog Posts */}
-        <div className="space-y-8">
+        <div className="space-y-6">
           {publishedPosts.map((post, index) => (
             <ScrollReveal key={post.id} delay={index * 0.1}>
               <article className="group">
                 {post.cover_image && (
-                  <div className="aspect-[16/9] mb-4 overflow-hidden elegant-border">
+                  <div className="aspect-[16/9] mb-3 overflow-hidden elegant-border">
                     <img
                       src={post.cover_image}
                       alt={post.title}
@@ -57,9 +57,9 @@ const BlogSection: React.FC = () => {
                   </div>
                 )}
                 
-                <div className="flex items-center gap-2 text-muted-foreground mb-3">
-                  <Calendar className="w-3 h-3" />
-                  <span className="text-[10px] uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-muted-foreground mb-2">
+                  <Calendar className="w-2.5 h-2.5" />
+                  <span className="text-[8px] uppercase tracking-widest">
                     {new Date(post.created_at).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
@@ -68,12 +68,12 @@ const BlogSection: React.FC = () => {
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-light tracking-wide mb-2 group-hover:text-primary transition-colors">
+                <h3 className="text-base font-light tracking-wide mb-2 group-hover:text-primary transition-colors">
                   {post.title}
                 </h3>
                 
                 {post.excerpt && (
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-xs text-muted-foreground leading-relaxed">
                     {post.excerpt}
                   </p>
                 )}

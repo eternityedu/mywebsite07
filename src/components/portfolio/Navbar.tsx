@@ -32,19 +32,19 @@ const Navbar: React.FC = () => {
         isScrolled ? 'bg-background/80 backdrop-blur-md border-b border-border/30' : ''
       }`}
     >
-      <div className="px-4">
-        <div className="flex items-center justify-between h-14">
+      <div className="px-3 w-full max-w-full">
+        <div className="flex items-center justify-between h-12">
           {/* Logo */}
-          <a href="#" className="text-sm tracking-[0.15em] uppercase font-light">
+          <a href="#" className="text-xs tracking-[0.12em] uppercase font-light">
             Portfolio
           </a>
           
-          {/* Mobile Menu Button - always show on mobile-first */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-foreground"
+            className="p-1.5 text-foreground"
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
         
@@ -55,15 +55,15 @@ const Navbar: React.FC = () => {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-border/30 overflow-hidden"
+              className="border-t border-border/30 overflow-hidden bg-background/95 backdrop-blur-md"
             >
-              <div className="py-4 space-y-3">
+              <div className="py-3 space-y-2">
                 {navLinks.map((link) => (
                   <a
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-xs uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-2"
+                    className="block text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors py-1.5"
                   >
                     {link.label}
                   </a>
