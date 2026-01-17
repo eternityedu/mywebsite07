@@ -7,27 +7,27 @@ const HeroSection: React.FC = () => {
   const { hero } = data;
   const nameRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [nameFontSize, setNameFontSize] = useState(32);
+  const [nameFontSize, setNameFontSize] = useState(24);
 
-  // Auto-size name to fit in one line
+  // Auto-size name to fit in one line - mobile first with smaller default
   useEffect(() => {
     const adjustFontSize = () => {
       if (!nameRef.current || !containerRef.current) return;
       
       const container = containerRef.current;
-      const maxWidth = container.clientWidth - 32; // Account for padding
-      let size = 32; // Start with smaller base size for mobile-first
+      const maxWidth = container.clientWidth - 16; // Account for padding
+      let size = 20; // Start with smaller base size for mobile-first
       
       nameRef.current.style.fontSize = `${size}px`;
       
-      // Increase size if there's room (for longer names, reduce)
-      while (nameRef.current.scrollWidth <= maxWidth && size < 48) {
+      // Increase size if there's room
+      while (nameRef.current.scrollWidth <= maxWidth && size < 36) {
         size += 1;
         nameRef.current.style.fontSize = `${size}px`;
       }
       
       // Reduce if too wide
-      while (nameRef.current.scrollWidth > maxWidth && size > 16) {
+      while (nameRef.current.scrollWidth > maxWidth && size > 14) {
         size -= 1;
         nameRef.current.style.fontSize = `${size}px`;
       }
@@ -41,17 +41,17 @@ const HeroSection: React.FC = () => {
   }, [hero.name]);
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative px-4">
-      <div ref={containerRef} className="w-full max-w-md mx-auto text-center">
+    <section className="min-h-screen flex items-center justify-center relative px-3">
+      <div ref={containerRef} className="w-full max-w-sm mx-auto text-center">
         {/* Profile Image */}
         {hero.image && (
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-            className="mb-8"
+            className="mb-6"
           >
-            <div className="w-24 h-24 mx-auto rounded-full overflow-hidden border border-primary/30">
+            <div className="w-20 h-20 mx-auto rounded-full overflow-hidden border border-primary/30">
               <img 
                 src={hero.image} 
                 alt={hero.name}
@@ -61,13 +61,13 @@ const HeroSection: React.FC = () => {
           </motion.div>
         )}
         
-        {/* Name - Auto-sizing */}
+        {/* Name - Auto-sizing, single line only */}
         <motion.h1 
           ref={nameRef}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
-          className="font-light tracking-wider mb-4 whitespace-nowrap overflow-hidden"
+          className="font-light tracking-wider mb-3 whitespace-nowrap overflow-hidden text-ellipsis"
           style={{ fontSize: `${nameFontSize}px` }}
         >
           {hero.name}
@@ -78,7 +78,7 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-[9px] uppercase tracking-[0.25em] text-muted-foreground mb-6"
+          className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground mb-5"
         >
           {hero.title}
         </motion.p>
@@ -88,7 +88,7 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, scaleX: 0 }}
           animate={{ opacity: 1, scaleX: 1 }}
           transition={{ duration: 1, delay: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-          className="divider mx-auto mb-6"
+          className="divider mx-auto mb-5"
         />
         
         {/* Subtitle */}
@@ -96,7 +96,7 @@ const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-          className="text-sm text-muted-foreground font-light leading-relaxed px-2"
+          className="text-xs text-muted-foreground font-light leading-relaxed px-1"
         >
           {hero.subtitle}
         </motion.p>
@@ -107,12 +107,12 @@ const HeroSection: React.FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1.2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 8, 0] }}
+          animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-px h-10 bg-gradient-to-b from-primary/50 to-transparent"
+          className="w-px h-8 bg-gradient-to-b from-primary/50 to-transparent"
         />
       </motion.div>
     </section>

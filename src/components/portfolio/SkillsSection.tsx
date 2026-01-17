@@ -7,15 +7,15 @@ const SkillsSection: React.FC = () => {
   const { skills } = data;
 
   return (
-    <section id="skills" className="py-20 px-4 border-t border-border/30">
-      <div className="max-w-md mx-auto">
+    <section id="skills" className="py-16 px-3 border-t border-border/30">
+      <div className="w-full max-w-sm mx-auto">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <ScrollReveal>
-            <span className="section-label mb-4 block">Expertise</span>
+            <span className="section-label mb-3 block">Expertise</span>
           </ScrollReveal>
           <ScrollReveal delay={0.1}>
-            <h2 className="text-2xl font-light tracking-wide mb-6">Skills & Tools</h2>
+            <h2 className="text-xl font-light tracking-wide mb-4">Skills & Tools</h2>
           </ScrollReveal>
           <ScrollReveal delay={0.2}>
             <div className="divider mx-auto" />
@@ -24,11 +24,11 @@ const SkillsSection: React.FC = () => {
         
         {/* Skills Grid */}
         <ScrollReveal delay={0.3}>
-          <div className="flex flex-wrap justify-center gap-3">
+          <div className="flex flex-wrap justify-center gap-2">
             {skills.map((skill) => (
               <span 
                 key={skill}
-                className="px-4 py-2 text-xs tracking-wider text-muted-foreground border border-border/50 hover:border-primary/50 hover:text-primary transition-all duration-500 cursor-default"
+                className="px-3 py-1.5 text-[10px] tracking-wider text-muted-foreground border border-border/50 hover:border-primary/50 hover:text-primary transition-all duration-500 cursor-default"
               >
                 {skill}
               </span>

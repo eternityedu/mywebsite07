@@ -1,77 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
-import { z } from 'zod';
-import { ArrowLeft } from 'lucide-react';
-
-const emailSchema = z.string().email('Invalid email address');
-const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
+import { useSimpleAuth } from '@/hooks/useSimpleAuth';
+import { ArrowLeft, User, Lock } from 'lucide-react';
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
-  const { user, signIn, signUp, loading } = useAuth();
-  const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState('');
+  const { isAdmin, login, loading } = useSimpleAuth();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && isAdmin) {
       navigate('/admin');
     }
-  }, [user, loading, navigate]);
+  }, [isAdmin, loading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    setSuccess('');
 
-    // Validate inputs
-    try {
-      emailSchema.parse(email);
-      passwordSchema.parse(password);
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
-        return;
-      }
-    }
-
-    if (isSignUp && password !== confirmPassword) {
-      setError('Passwords do not match');
+    if (!username.trim() || !password.trim()) {
+      setError('Please enter both username and password');
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      if (isSignUp) {
-        const { error } = await signUp(email, password);
-        if (error) {
-          if (error.message.includes('already registered')) {
-            setError('This email is already registered. Please sign in.');
-          } else {
-            setError(error.message);
-          }
-        } else {
-          setSuccess('Account created! You can now sign in.');
-          setIsSignUp(false);
-          setPassword('');
-          setConfirmPassword('');
-        }
-      } else {
-        const { error } = await signIn(email, password);
-        if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            setError('Invalid email or password');
-          } else {
-            setError(error.message);
-          }
-        }
+      const result = await login(username.trim(), password);
+      if (!result.success) {
+        setError(result.error || 'Login failed');
       }
     } catch {
       setError('An unexpected error occurred');
@@ -83,7 +44,7 @@ const Auth: React.FC = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -94,92 +55,67 @@ const Auth: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-sm"
+        className="w-full max-w-xs"
       >
         <button
           onClick={() => navigate('/')}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm mb-8"
+          className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-xs mb-6"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3 h-3" />
           Back
         </button>
 
-        <div className="text-center mb-10">
-          <span className="section-label block mb-4">Admin</span>
-          <h1 className="text-2xl font-light tracking-wide">
-            {isSignUp ? 'Create Account' : 'Sign In'}
+        <div className="text-center mb-8">
+          <span className="section-label block mb-3">Admin Access</span>
+          <h1 className="text-xl font-light tracking-wide">
+            Sign In
           </h1>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="section-label block mb-3">Email</label>
+            <label className="section-label flex items-center gap-2 mb-2">
+              <User className="w-3 h-3" />
+              Username
+            </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-0 py-2 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground text-sm"
               required
-              autoComplete="email"
+              autoComplete="username"
+              placeholder="Enter username"
             />
           </div>
 
           <div>
-            <label className="section-label block mb-3">Password</label>
+            <label className="section-label flex items-center gap-2 mb-2">
+              <Lock className="w-3 h-3" />
+              Password
+            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground"
+              className="w-full px-0 py-2 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground text-sm"
               required
-              autoComplete={isSignUp ? 'new-password' : 'current-password'}
+              autoComplete="current-password"
+              placeholder="Enter password"
             />
           </div>
 
-          {isSignUp && (
-            <div>
-              <label className="section-label block mb-3">Confirm Password</label>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full px-0 py-3 bg-transparent border-0 border-b border-border focus:border-primary focus:outline-none transition-colors text-foreground"
-                required
-                autoComplete="new-password"
-              />
-            </div>
-          )}
-
           {error && (
-            <p className="text-destructive text-sm text-center">{error}</p>
-          )}
-
-          {success && (
-            <p className="text-primary text-sm text-center">{success}</p>
+            <p className="text-destructive text-xs text-center">{error}</p>
           )}
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full btn-minimal justify-center mt-8 disabled:opacity-50"
+            className="w-full btn-minimal justify-center mt-6 py-3 text-xs disabled:opacity-50"
           >
-            {isSubmitting ? 'Loading...' : isSignUp ? 'Create Account' : 'Sign In'}
+            {isSubmitting ? 'Signing in...' : 'Sign In'}
           </button>
-
-          <p className="text-center text-sm text-muted-foreground">
-            {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-            <button
-              type="button"
-              onClick={() => {
-                setIsSignUp(!isSignUp);
-                setError('');
-                setSuccess('');
-              }}
-              className="text-primary hover:underline"
-            >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
-            </button>
-          </p>
         </form>
       </motion.div>
     </div>

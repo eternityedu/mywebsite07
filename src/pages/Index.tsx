@@ -11,7 +11,7 @@ import Footer from '@/components/portfolio/Footer';
 
 const Index: React.FC = () => {
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden w-full max-w-full">
       <Navbar />
       <HeroSection />
       <AboutSection />

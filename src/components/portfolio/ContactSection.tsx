@@ -14,44 +14,44 @@ const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-20 px-4 border-t border-border/30">
-      <div className="max-w-md mx-auto text-center">
+    <section id="contact" className="py-16 px-3 border-t border-border/30">
+      <div className="w-full max-w-sm mx-auto text-center">
         <ScrollReveal>
-          <span className="section-label mb-4 block">Connect</span>
+          <span className="section-label mb-3 block">Connect</span>
         </ScrollReveal>
         
         <ScrollReveal delay={0.1}>
-          <h2 className="text-2xl font-light tracking-wide mb-6">Get in Touch</h2>
+          <h2 className="text-xl font-light tracking-wide mb-4">Get in Touch</h2>
         </ScrollReveal>
         
         <ScrollReveal delay={0.2}>
-          <div className="divider mx-auto mb-8" />
+          <div className="divider mx-auto mb-6" />
         </ScrollReveal>
         
         {/* Email CTA */}
         <ScrollReveal delay={0.3}>
           <a 
             href={`mailto:${contact.email}`}
-            className="inline-flex items-center gap-3 text-lg text-foreground hover:text-primary transition-colors mb-8"
+            className="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
           >
-            <Mail className="w-4 h-4" />
-            <span className="text-sm">{contact.email}</span>
+            <Mail className="w-3 h-3" />
+            <span className="text-xs">{contact.email}</span>
           </a>
         </ScrollReveal>
         
         {/* Contact Details */}
         <ScrollReveal delay={0.4}>
-          <div className="space-y-4 mb-10">
+          <div className="space-y-3 mb-8">
             {contact.phone && (
-              <div className="flex items-center justify-center gap-3 text-muted-foreground">
-                <Phone className="w-3 h-3" />
-                <span className="text-xs">{contact.phone}</span>
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <Phone className="w-2.5 h-2.5" />
+                <span className="text-[10px]">{contact.phone}</span>
               </div>
             )}
             {contact.location && (
-              <div className="flex items-center justify-center gap-3 text-muted-foreground">
-                <MapPin className="w-3 h-3" />
-                <span className="text-xs">{contact.location}</span>
+              <div className="flex items-center justify-center gap-2 text-muted-foreground">
+                <MapPin className="w-2.5 h-2.5" />
+                <span className="text-[10px]">{contact.location}</span>
               </div>
             )}
           </div>
@@ -59,7 +59,7 @@ const ContactSection: React.FC = () => {
         
         {/* Social Links */}
         <ScrollReveal delay={0.5}>
-          <div className="flex justify-center gap-6">
+          <div className="flex justify-center gap-4">
             {Object.entries(contact.social).map(([key, url]) => {
               if (!url) return null;
               const Icon = socialIcons[key as keyof typeof socialIcons];
@@ -70,10 +70,10 @@ const ContactSection: React.FC = () => {
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-muted-foreground hover:text-primary transition-colors"
+                  className="p-1.5 text-muted-foreground hover:text-primary transition-colors"
                   aria-label={key}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-3.5 h-3.5" />
                 </a>
               );
             })}

@@ -6,19 +6,21 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import FileUpload from '@/components/admin/FileUpload';
 import BlogManager from '@/components/admin/BlogManager';
 import SocialLinksManager from '@/components/admin/SocialLinksManager';
+import { useSimpleAuth } from '@/hooks/useSimpleAuth';
 
 const Admin: React.FC = () => {
-  const { data, updateData, isAdmin, loading } = usePortfolio();
+  const { data, updateData, loading } = usePortfolio();
+  const { isAdmin, loading: authLoading } = useSimpleAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('hero');
   const [localData, setLocalData] = useState(data);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isAdmin) {
+    if (!authLoading && !isAdmin) {
       navigate('/auth');
     }
-  }, [isAdmin, loading, navigate]);
+  }, [isAdmin, authLoading, navigate]);
 
   useEffect(() => {
     setLocalData(data);
@@ -115,7 +117,7 @@ const Admin: React.FC = () => {
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
 
-  if (!isAdmin) return null;
+  if (!isAdmin || authLoading) return null;
 
   return (
     <div className="min-h-screen bg-background">
