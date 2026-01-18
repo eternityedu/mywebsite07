@@ -1,6 +1,7 @@
 import React from 'react';
 import { usePortfolio } from '@/contexts/PortfolioContext';
 import ScrollReveal from '@/components/animations/ScrollReveal';
+import ContactForm from './ContactForm';
 import { Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
 
 const ContactSection: React.FC = () => {
@@ -14,25 +15,32 @@ const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="py-16 px-3 border-t border-border/30">
+    <section id="contact" className="py-12 px-3 border-t border-border/30">
       <div className="w-full max-w-sm mx-auto text-center">
         <ScrollReveal>
           <span className="section-label mb-3 block">Connect</span>
         </ScrollReveal>
         
         <ScrollReveal delay={0.1}>
-          <h2 className="text-xl font-light tracking-wide mb-4">Get in Touch</h2>
+          <h2 className="text-lg font-light tracking-wide mb-4">Get in Touch</h2>
         </ScrollReveal>
         
         <ScrollReveal delay={0.2}>
           <div className="divider mx-auto mb-6" />
         </ScrollReveal>
         
+        {/* Contact Form */}
+        <ScrollReveal delay={0.25}>
+          <div className="mb-8">
+            <ContactForm />
+          </div>
+        </ScrollReveal>
+        
         {/* Email CTA */}
         <ScrollReveal delay={0.3}>
           <a 
             href={`mailto:${contact.email}`}
-            className="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-foreground hover:text-primary transition-colors mb-4"
           >
             <Mail className="w-3 h-3" />
             <span className="text-xs">{contact.email}</span>
@@ -41,7 +49,7 @@ const ContactSection: React.FC = () => {
         
         {/* Contact Details */}
         <ScrollReveal delay={0.4}>
-          <div className="space-y-3 mb-8">
+          <div className="space-y-2 mb-6">
             {contact.phone && (
               <div className="flex items-center justify-center gap-2 text-muted-foreground">
                 <Phone className="w-2.5 h-2.5" />
