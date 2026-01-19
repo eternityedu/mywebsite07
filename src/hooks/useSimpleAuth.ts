@@ -22,20 +22,19 @@ export const useSimpleAuth = () => {
 
   const login = useCallback(async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      const { data, error } = await supabase
-        .from('admin_credentials')
-        .select('username, password_hash')
-        .eq('username', username)
-        .single();
+      // Use secure RPC function to verify credentials without exposing password hash
+      const { data, error } = await supabase.rpc('verify_admin_credentials', {
+        _username: username,
+        _password: password
+      });
 
-      if (error || !data) {
-        return { success: false, error: 'Invalid username or password' };
+      if (error) {
+        return { success: false, error: 'An error occurred during login' };
       }
 
-      // Simple password comparison (for demo purposes)
-      if (data.password_hash === password) {
-        adminSession = { isAdmin: true, adminName: data.username };
-        setAuthState({ isAdmin: true, loading: false, adminName: data.username });
+      if (data === true) {
+        adminSession = { isAdmin: true, adminName: username };
+        setAuthState({ isAdmin: true, loading: false, adminName: username });
         return { success: true };
       }
 

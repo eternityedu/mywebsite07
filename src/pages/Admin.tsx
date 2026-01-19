@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { usePortfolio, Project } from '@/contexts/PortfolioContext';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, FileText, BookOpen, Link as LinkIcon, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Save, Plus, Trash2, User, Briefcase, Code, Mail, FileText, BookOpen, MessageSquare } from 'lucide-react';
 import ImageUpload from '@/components/admin/ImageUpload';
 import FileUpload from '@/components/admin/FileUpload';
 import BlogManager from '@/components/admin/BlogManager';
-import SocialLinksManager from '@/components/admin/SocialLinksManager';
+
 import MessagesManager from '@/components/admin/MessagesManager';
 import { useSimpleAuth } from '@/hooks/useSimpleAuth';
 
@@ -114,7 +114,6 @@ const Admin: React.FC = () => {
     { id: 'skills', label: 'Skills', icon: Code },
     { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'blog', label: 'Blog', icon: BookOpen },
-    { id: 'links', label: 'Links', icon: LinkIcon },
     { id: 'messages', label: 'Messages', icon: MessageSquare },
     { id: 'contact', label: 'Contact', icon: Mail },
   ];
@@ -400,9 +399,6 @@ const Admin: React.FC = () => {
 
             {/* Blog Tab */}
             {activeTab === 'blog' && <BlogManager />}
-
-            {/* Links Tab */}
-            {activeTab === 'links' && <SocialLinksManager />}
 
             {/* Messages Tab */}
             {activeTab === 'messages' && <MessagesManager />}
