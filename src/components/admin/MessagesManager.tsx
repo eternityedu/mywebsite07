@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Mail, Trash2, Check, RefreshCw, Loader2 } from 'lucide-react';
+import { Mail, Trash2, Check, RefreshCw, Loader2, Reply } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface ContactMessage {
@@ -23,10 +23,8 @@ const MessagesManager: React.FC = () => {
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('contact_messages')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Use the secure RPC function that bypasses RLS
+      const { data, error } = await supabase.rpc('get_admin_messages');
 
       if (error) throw error;
       setMessages(data || []);
@@ -44,10 +42,7 @@ const MessagesManager: React.FC = () => {
 
   const markAsRead = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .update({ read: true })
-        .eq('id', id);
+      const { error } = await supabase.rpc('mark_message_read', { _id: id });
 
       if (error) throw error;
       setMessages(messages.map(m => m.id === id ? { ...m, read: true } : m));
@@ -60,10 +55,7 @@ const MessagesManager: React.FC = () => {
 
   const deleteMessage = async (id: string) => {
     try {
-      const { error } = await supabase
-        .from('contact_messages')
-        .delete()
-        .eq('id', id);
+      const { error } = await supabase.rpc('delete_message', { _id: id });
 
       if (error) throw error;
       setMessages(messages.filter(m => m.id !== id));
@@ -72,6 +64,12 @@ const MessagesManager: React.FC = () => {
       console.error('Error deleting message:', error);
       toast.error('Failed to delete');
     }
+  };
+
+  const replyToMessage = (email: string, name: string) => {
+    const subject = encodeURIComponent(`Re: Your message from portfolio`);
+    const body = encodeURIComponent(`Hi ${name},\n\nThank you for reaching out!\n\n`);
+    window.open(`mailto:${email}?subject=${subject}&body=${body}`, '_blank');
   };
 
   const unreadCount = messages.filter(m => !m.read).length;
@@ -135,6 +133,15 @@ const MessagesManager: React.FC = () => {
                         <Check className="w-3 h-3" />
                       </Button>
                     )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => replyToMessage(msg.email, msg.name)}
+                      className="h-6 w-6 p-0 text-primary hover:text-primary"
+                      title="Reply"
+                    >
+                      <Reply className="w-3 h-3" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="sm"

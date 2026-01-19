@@ -175,6 +175,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      delete_message: { Args: { _id: string }; Returns: boolean }
+      get_admin_messages: {
+        Args: never
+        Returns: {
+          created_at: string
+          email: string
+          id: string
+          message: string
+          name: string
+          read: boolean
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -182,6 +194,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      mark_message_read: { Args: { _id: string }; Returns: boolean }
       verify_admin_credentials: {
         Args: { _password: string; _username: string }
         Returns: boolean
