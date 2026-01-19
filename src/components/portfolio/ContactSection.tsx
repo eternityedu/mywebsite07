@@ -2,7 +2,7 @@ import React from 'react';
 import { usePortfolio } from '@/contexts/PortfolioContext';
 import ScrollReveal from '@/components/animations/ScrollReveal';
 import ContactForm from './ContactForm';
-import { Mail, Phone, MapPin, Linkedin, Github, Twitter } from 'lucide-react';
+import { Mail, Phone, MapPin, Linkedin, Github } from 'lucide-react';
 
 const ContactSection: React.FC = () => {
   const { data } = usePortfolio();
@@ -11,7 +11,6 @@ const ContactSection: React.FC = () => {
   const socialIcons = {
     linkedin: Linkedin,
     github: Github,
-    twitter: Twitter,
   };
 
   return (
